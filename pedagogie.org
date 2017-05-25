@@ -1,0 +1,60 @@
+#+TITLE: Pédagogie
+
+
+* Webpack config
+
+#+BEGIN_SRC js
+    resolve: {
+	extensions: ['.js','.jsx']
+    },
+#+END_SRC
+
+Cette partie permet à webpack de bundler les modules autres que l'entrypoint via les imports de modules  
+
+
+#+BEGIN_SRC js
+    devServer: {
+	...,
+	disableHostCheck: true,
+	...
+    }
+#+END_SRC
+
+Nouveauté pour webpack 2.4+. L'adresse 0.0.0.0 est interdite (raison de sécurité), permet l'utilisation de cette adresse.
+
+
+Webpack 2.+ : Les règles pour =module= ont changées par rapport aux versions 1.+
+
+#+BEGIN_SRC diff
+  module: {
+-    loaders: [
++    rules: [
+      {
++        test: /\.jsx?$/,
+-	  exclude: (/node_modules/),
++	  exclude: [/node_modules/ ],
+-        loader: 'babel-loader',
+-        query: {
+-          presets: ['react', 'es2015'],
+-          plugins: ['react-html-attrs', 'transform-class-properties'],
+-        }
++	  use: [
++	    {
++	    loader: 'babel-loader',
++	    options: {
++		presets: ['react', 'es2015', 'stage-0'],
++		plugins : ['react-html-attrs', 'transform-class-properties']
++               },
++	  }
++    ]
+      }
+    ]
+  },
+#+END_SRC
+
+=publicPath= permet de pointer à webpack-dev-server où se passe les changements à actualiser pour le hot module replacement etc... ~
+
+#+BEGIN_SRC js
+    path: __dirname + '/public/', 
+    publicPath: 'public/', 
+#+END_SRC
